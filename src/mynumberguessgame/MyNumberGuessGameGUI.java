@@ -1,21 +1,39 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package mynumberguessgame;
+
+import validation.*;
+import javax.swing.JOptionPane;
+
 
 /**
  *
  * @author ryancorbin
  */
 public class MyNumberGuessGameGUI extends javax.swing.JFrame {
+    private MyNumberGuessProgram guesser;
+    private String min;
+    private String max;
+    private static final String RANGE_ERR_MSG = "Range values must be numeric";
 
     /**
      * Creates new form MyNumberGuessGameGUI
      */
     public MyNumberGuessGameGUI() {
         initComponents();
+        min = JOptionPane.showInputDialog("Enter the low end of the range: ");
+        max = JOptionPane.showInputDialog("Enter the high end of the range: "); 
+        titleWithRange.setText("What number am I thinking of between " + min + " and " + max);
+        
+        try{
+            ((JTextFieldValidateable)guessSpace).setValidator(new NumericRangeValidator(min,max));
+        }catch(NumberFormatException nfe){
+            JOptionPane.showMessageDialog(rootPane, RANGE_ERR_MSG);
+        }
+        
+        try{
+            guesser = new MyNumberGuessProgram(min, max); 
+        }catch(NumberFormatException nfe) {
+            JOptionPane.showMessageDialog(rootPane, RANGE_ERR_MSG);
+        }  
     }
 
     /**
@@ -27,17 +45,15 @@ public class MyNumberGuessGameGUI extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTextPane1 = new javax.swing.JTextPane();
+        titleWithRange = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
-        jLabel2 = new javax.swing.JLabel();
+        outputLabel = new javax.swing.JLabel();
+        jButton2 = new javax.swing.JButton();
+        guessSpace = new validation.JTextFieldValidateable(20);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jLabel1.setText("What number am I thinking of between 1 and 10?");
-
-        jScrollPane1.setViewportView(jTextPane1);
+        titleWithRange.setText("What number am I thinking of between 1 and 10?");
 
         jButton1.setText("Guess");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -46,48 +62,102 @@ public class MyNumberGuessGameGUI extends javax.swing.JFrame {
             }
         });
 
-        jLabel2.setText("Guess a Number from 1 to 10");
+        outputLabel.setText("Guess a Number");
+
+        jButton2.setText("Quit");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
+        guessSpace.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                guessSpaceActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(135, 135, 135)
-                .addComponent(jLabel2)
-                .addGap(0, 0, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(94, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addGap(68, 68, 68))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(jScrollPane1)
-                            .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 90, Short.MAX_VALUE))
-                        .addGap(183, 183, 183))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(79, 79, 79)
+                        .addComponent(jButton2)
+                        .addGap(54, 54, 54)
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(125, 125, 125)
+                        .addComponent(guessSpace, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(137, 137, 137)
+                        .addComponent(outputLabel))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(32, 32, 32)
+                        .addComponent(titleWithRange)))
+                .addContainerGap(55, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(25, 25, 25)
-                .addComponent(jLabel1)
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton1)
-                .addGap(58, 58, 58)
-                .addComponent(jLabel2)
-                .addContainerGap(35, Short.MAX_VALUE))
+                .addGap(23, 23, 23)
+                .addComponent(titleWithRange)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(guessSpace, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton1)
+                    .addComponent(jButton2))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(outputLabel)
+                .addContainerGap(18, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
+        String number = guessSpace.getText();
+        String results = "";
+        
+        
+        
+        try{
+        if(((JTextFieldValidateable)guessSpace).isFieldValid()){
+            try{
+                switch(guesser.checkGuess3(number)){
+                    case CORRECT: results = "You guessed the number!";
+                        guesser.setNumber();
+                        break;
+                    case LOW: results = "Too Low.  Guess Again.";
+                        break;
+                    case HIGH: results = "Too High.  Guess Again.";
+                        break;
+                }
+            }catch(NumberFormatException nfe) {
+                JOptionPane.showMessageDialog(rootPane, "Numbers Only Please");
+            }
+            outputLabel.setText(results);
+        }else{
+            JOptionPane.showMessageDialog(rootPane, "Please provide a number with in the range.");
+        }
+        }catch (NumberFormatException nf){
+             JOptionPane.showMessageDialog(rootPane, "Please Enter A Number");
+        }
+        
+        
+        
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        System.exit(0);
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void guessSpaceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_guessSpaceActionPerformed
+        jButton1ActionPerformed(evt);
+    }//GEN-LAST:event_guessSpaceActionPerformed
 
     /**
      * @param args the command line arguments
@@ -125,10 +195,10 @@ public class MyNumberGuessGameGUI extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextField guessSpace;
     private javax.swing.JButton jButton1;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextPane jTextPane1;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JLabel outputLabel;
+    private javax.swing.JLabel titleWithRange;
     // End of variables declaration//GEN-END:variables
 }

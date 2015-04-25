@@ -5,37 +5,47 @@
  */
 package mynumberguessgame;
 
+import java.util.Random;
+
 /**
  *
  * @author ryancorbin
  */
 public class MyNumberGuessProgram {
-    private int correctValue = 2;
+    private int randomNum;
+    private Random random;
+    private Integer min;
+    private Integer max;
+
+    public MyNumberGuessProgram(String min, String max) {
+        random = new Random();
+        this.min = Integer.parseInt(min);
+        this.max = Integer.parseInt(max);
+        setNumber();
+    }
     
+    public void setNumber(){
+        randomNum = random.nextInt(max-min)+1+min;
+    }
+    
+    /**
+     * DESCRIPTION: 
+     * @param guess
+     * @return xxxx
+     * @throws IllegalArgumentException xxx
+     * 
+     */
     
     public NumberGuessResult checkGuess3(String guess) throws IllegalArgumentException {
+        int guessTry = Integer.parseInt(guess);
         
-        int intGuess = 0;
-        
-        try {
-            intGuess = Integer.valueOf(guess.trim());
-        } catch(NumberFormatException nfe) {
-            throw new IllegalArgumentException("Only whole numbers allowed as input", nfe);
+        if(guessTry == randomNum){
+            return NumberGuessResult.CORRECT;
+        } else if(guessTry > randomNum) {
+            return NumberGuessResult.HIGH;
+        } else {
+            return NumberGuessResult.LOW;
         }
-        
-        if(intGuess < 1 || intGuess > 10) {
-            throw new IllegalArgumentException("Only Numbers from 1 to 10 allowed");
-        }
-        
-        NumberGuessResult result = NumberGuessResult.CORRECT;
-        
-        if(intGuess > correctValue) {
-            result = NumberGuessResult.HIGH;
-        } else if(intGuess < correctValue) {
-            result = NumberGuessResult.LOW;
-        }
-        
-        return result;
     }
     
     

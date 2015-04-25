@@ -11,7 +11,7 @@ import javax.swing.UIManager;
  *
  * @author ryancorbin
  */
-public class MyNumberGuessGame {
+public class MyNumberGuessGameApp {
 
     /**
      * @param args the command line arguments
